@@ -1,9 +1,9 @@
 CFLAGS	= -lsodium
 CC		= gcc
 
-NAME	= ransonware
+NAME	= ransomware
 
-SRC		= ransonware.c
+SRC		= ransomware.c
 OBJ		= ${SRC:.c=.o}
 
 %.o: %.c
