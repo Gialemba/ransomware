@@ -1,7 +1,10 @@
-#  XChaCha20 Ransomware Skeleton (Educational Purpose Only)
+#  Ransomware Skeleton (Educational Purpose Only)
 
-> ⚠️ **Disclaimer**: This project is a *research-grade, educational skeleton* of a ransomware-like file encryptor/decryptor built in C.  
+> ⚠️ **Disclaimer**: This project is a *research-grade, educational skeleton* of a ransomware-like file encryptor/decryptor built in C.
+
 > It is **not** intended for illegal use or deployment. This code is meant for **academic learning, malware analysis, or security testing** in safe environments.
+
+> It most likely work only on Linux
 
 ---
 
