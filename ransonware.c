@@ -14,7 +14,7 @@
 
 #define BUFFER_SIZE 1024
 
-#define STARTING_PATH	"/"
+#define STARTING_PATH	"/home"
 #define KEYS_FILE		"/table"
 
 #define KEY_LEN     crypto_secretstream_xchacha20poly1305_KEYBYTES
